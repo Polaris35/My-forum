@@ -6,6 +6,7 @@ import { MdSettings } from 'react-icons/md';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { Clipboard } from '@/shared/ui';
 import { PiSignOutBold } from 'react-icons/pi';
+import { RiArrowGoBackLine } from 'react-icons/ri';
 
 export function Drawer() {
     const session = useSession();
@@ -52,6 +53,13 @@ export function Drawer() {
                             onClick={() => router.push(ROUTES.PROFILE)}
                         >
                             <MdSettings size={32} /> Setting
+                        </UiButton>
+                        <UiButton
+                            className="flex justify-start gap-2 text-lg"
+                            variant={'ghost'}
+                            onClick={() => router.push(ROUTES.HOME)}
+                        >
+                            <RiArrowGoBackLine size={32} /> Back to forum
                         </UiButton>
                         <UiButton
                             className="flex justify-start gap-2 text-lg"
