@@ -1,0 +1,678 @@
+openapi: 3.0.0
+paths:
+  /api/users/find/by-id/{id}:
+    get:
+      operationId: UsersController_findById
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Users
+      security:
+        - bearer: []
+  /api/users/find/by-email/{email}:
+    get:
+      operationId: UsersController_findByEmail
+      parameters:
+        - name: email
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Users
+      security:
+        - bearer: []
+  /api/users/find/by-part-of-email/{email}:
+    get:
+      operationId: UsersController_findByPartOfEmail
+      parameters:
+        - name: email
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponse'
+      tags:
+        - Users
+      security:
+        - bearer: []
+  /api/users/me:
+    get:
+      operationId: UsersController_me
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Users
+      security:
+        - bearer: []
+  /api/users/{id}:
+    delete:
+      operationId: UsersController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Users
+      security:
+        - bearer: []
+  /api/users/change-image:
+    put:
+      operationId: UsersController_changeImage
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Users
+      security:
+        - bearer: []
+  /api/attachments/upload/file:
+    post:
+      operationId: AttachmentsController_uploadFile
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: number
+      tags:
+        - Attachments
+      security:
+        - bearer: []
+  /api/attachments/upload/image:
+    post:
+      operationId: AttachmentsController_uploadImage
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: number
+      tags:
+        - Attachments
+      security:
+        - bearer: []
+  /api/attachments:
+    get:
+      operationId: AttachmentsController_getFileAttachment
+      parameters:
+        - name: id
+          required: true
+          in: query
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Attachments
+      security:
+        - bearer: []
+  /api/attachments/data:
+    get:
+      operationId: AttachmentsController_getAttachmentsData
+      parameters:
+        - name: ids
+          required: true
+          in: query
+          schema:
+            type: array
+            items:
+              type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AttachmentDataResponse'
+      tags:
+        - Attachments
+      security:
+        - bearer: []
+  /api/messages:
+    post:
+      operationId: MessagesController_createMessage
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMessageDto'
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+      tags:
+        - Messages
+      security:
+        - bearer: []
+    delete:
+      operationId: MessagesController_deleteMessage
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Messages
+      security:
+        - bearer: []
+  /api/messages/list/{conversationId}&{skip}:
+    get:
+      operationId: MessagesController_conversationMessagesList
+      parameters:
+        - name: conversationId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: skip
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageResponse'
+      tags:
+        - Messages
+      security:
+        - bearer: []
+  /api/messages/first/{conversationId}:
+    get:
+      operationId: MessagesController_getFirstMessage
+      parameters:
+        - name: conversationId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+      tags:
+        - Messages
+      security:
+        - bearer: []
+  /api/conversations/private:
+    post:
+      operationId: ConversationsController_createPrivateConversation
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                userId:
+                  type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationPreviewResponse'
+      tags:
+        - Conversations
+      security:
+        - bearer: []
+  /api/conversations/group:
+    post:
+      operationId: ConversationsController_createGroupConversation
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationPreviewResponse'
+      tags:
+        - Conversations
+      security:
+        - bearer: []
+  /api/conversations/list:
+    get:
+      operationId: ConversationsController_conversationPreviewList
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationPreviewListResponse'
+      tags:
+        - Conversations
+      security:
+        - bearer: []
+  /api/conversations/{id}:
+    delete:
+      operationId: ConversationsController_deleteConversation
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Conversations
+      security:
+        - bearer: []
+  /api/auth/credentials/register:
+    post:
+      operationId: AuthController_CredentialsRegister
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterDto'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - Auth
+  /api/auth/credentials/login:
+    post:
+      operationId: AuthController_credentialsLogin
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUserWithTokens'
+      tags:
+        - Auth
+  /api/auth/logout:
+    get:
+      operationId: AuthController_logout
+      parameters:
+        - name: refreshToken
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Auth
+  /api/auth/refresh-tokens:
+    get:
+      operationId: AuthController_refreshTokens
+      parameters:
+        - name: refreshToken
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tokens'
+      tags:
+        - Auth
+  /api/auth/google:
+    get:
+      operationId: AuthController_GoogleAuth
+      parameters:
+        - name: token
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUserWithTokens'
+      tags:
+        - Auth
+info:
+  title: My-chat
+  description: ''
+  version: '1.0'
+  contact: {}
+tags: []
+servers: []
+components:
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+  schemas:
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: number
+        createdAt:
+          format: date-time
+          type: string
+        email:
+          type: string
+        image:
+          type: string
+        name:
+          type: string
+      required:
+        - id
+        - createdAt
+        - email
+        - image
+        - name
+    AttachmentDataResponse:
+      type: object
+      properties:
+        id:
+          type: number
+        fileName:
+          type: string
+        format:
+          type: string
+        size:
+          type: number
+      required:
+        - id
+        - fileName
+        - format
+        - size
+    CreateMessageDto:
+      type: object
+      properties:
+        conversationId:
+          type: number
+          description: id of conversation
+          example: 1
+        message:
+          type: string
+        attachmentList:
+          description: list of id attached files
+          example:
+            - 1
+            - 2
+            - 3
+          type: array
+          items:
+            type: number
+      required:
+        - conversationId
+        - message
+        - attachmentList
+    MessageResponse:
+      type: object
+      properties:
+        id:
+          type: number
+        message:
+          type: string
+        type:
+          type: string
+          enum:
+            - STANDALONE_MESSAGE
+            - SHARED_MESSAGE
+            - ANSWERED_MESSAGE
+            - SYSTEM_MESSAGE
+          example:
+            - STANDALONE_MESSAGE
+            - SHARED_MESSAGE
+            - ANSWERED_MESSAGE
+            - SYSTEM_MESSAGE
+        referenceMessageId:
+          type: number
+        isReaded:
+          type: boolean
+        conversationId:
+          type: number
+        createdAt:
+          format: date-time
+          type: string
+        senderId:
+          type: number
+        senderAvatarUrl:
+          type: string
+        senderName:
+          type: string
+        attachmentList:
+          type: array
+          items:
+            type: number
+        attachmentType:
+          type: string
+          enum:
+            - IMAGE
+            - FILE
+          example:
+            - IMAGE
+            - FILE
+      required:
+        - id
+        - message
+        - type
+        - referenceMessageId
+        - isReaded
+        - conversationId
+        - createdAt
+        - senderId
+        - senderAvatarUrl
+        - senderName
+        - attachmentList
+        - attachmentType
+    ConversationPreviewResponse:
+      type: object
+      properties:
+        id:
+          type: number
+        title:
+          type: string
+        avatarUrl:
+          type: string
+        type:
+          type: string
+        senderName:
+          type: string
+        message:
+          type: string
+        time:
+          format: date-time
+          type: string
+        messageCount:
+          type: number
+        messageType:
+          type: string
+          enum:
+            - STANDALONE_MESSAGE
+            - SHARED_MESSAGE
+            - ANSWERED_MESSAGE
+            - SYSTEM_MESSAGE
+          example:
+            - STANDALONE_MESSAGE
+            - SHARED_MESSAGE
+            - ANSWERED_MESSAGE
+            - SYSTEM_MESSAGE
+      required:
+        - id
+        - title
+        - avatarUrl
+        - type
+        - senderName
+        - message
+        - time
+        - messageCount
+        - messageType
+    ConversationPreviewListResponse:
+      type: object
+      properties:
+        conversations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConversationPreviewResponse'
+      required:
+        - conversations
+    RegisterDto:
+      type: object
+      properties:
+        email:
+          type: string
+          example: ikozluk160@gmail.com
+        password:
+          type: string
+          example: '12345'
+        passwordRepeat:
+          type: string
+          example: '12345'
+      required:
+        - email
+        - password
+        - passwordRepeat
+    LoginDto:
+      type: object
+      properties:
+        email:
+          type: string
+          example: ikozluk160@gmail.com
+        password:
+          type: string
+          example: '12345'
+      required:
+        - email
+        - password
+    ResponseUserWithTokens:
+      type: object
+      properties:
+        id:
+          type: number
+        createdAt:
+          format: date-time
+          type: string
+        email:
+          type: string
+        image:
+          type: string
+        name:
+          type: string
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+      required:
+        - id
+        - createdAt
+        - email
+        - image
+        - name
+        - accessToken
+        - refreshToken
+    Tokens:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+      required:
+        - accessToken
+        - refreshToken

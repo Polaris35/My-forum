@@ -1,0 +1,177 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 Int                  @id @default(autoincrement())
+  createdAt          DateTime             @default(now()) @map("created_at")
+  email              String               @unique
+  image              Int
+  name               String
+  password           String?
+  provider           Provider
+  conversations      Conversation[]
+  participants       Participant[]
+  Token              Token[]
+  Message            Message[]
+  messageReadHistory MessageReadHistory[]
+  Post               Post[]
+  Comments           Comments[]
+  Vote               Vote[]
+
+  @@map("users")
+}
+
+model Token {
+  token     String   @unique
+  exp       DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int      @map("user_id")
+  userAgent String   @map("user_agent")
+
+  @@map("tokens")
+}
+
+model Conversation {
+  id           Int              @id @default(autoincrement())
+  createdAt    DateTime         @default(now()) @map("created_at")
+  title        String
+  creatorId    Int              @map("creator_id")
+  avatarIds    Int[]            @map("avatar_url")
+  type         ConversationType @default(PRIVATE)
+  author       User             @relation(fields: [creatorId], references: [id])
+  participants Participant[]
+  messages     Message[]
+
+  @@map("conversations")
+}
+
+model Participant {
+  userId         Int             @map("user_id")
+  conversationId Int             @map("conversation_id")
+  role           ParticipantRole @default(USER)
+  dialog         Conversation    @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  member         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, conversationId])
+  @@map("participants")
+}
+
+model Message {
+  id                 Int         @id @default(autoincrement())
+  message            String      @db.VarChar(255)
+  type               MessageType @default(STANDALONE_MESSAGE)
+  referenceMessageId Int?        @default(-1) @map("reference_message_id")
+  attachmentList     Int[]       @map("attachment_list")
+  createdAt          DateTime    @default(now()) @map("created_at")
+  isDeleted          Boolean     @default(false) @map("is_deleted")
+
+  conversation   Conversation         @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User                 @relation(fields: [senderId], references: [id])
+  senderId       Int                  @map("sender_id")
+  conversationId Int                  @map("conversation_id")
+  readHistory    MessageReadHistory[]
+
+  @@map("messages")
+}
+
+model MessageReadHistory {
+  messageId     Int @map("message_id")
+  participantId Int @map("participant_id")
+
+  message     Message @relation(fields: [messageId], references: [id])
+  participant User    @relation(fields: [participantId], references: [id])
+
+  @@id([messageId, participantId])
+  @@map("message_read_history")
+}
+
+model Attachment {
+  id   Int            @id @default(autoincrement())
+  url  String
+  type AttachmentType
+
+  @@map("attachments")
+}
+
+model Subreddit {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  topic     String
+  Post      Post[]
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  title     String
+  body      String
+  image     Int
+
+  userId      Int        @map("user_id")
+  creator     User       @relation(fields: [userId], references: [id])
+  subredditId Int        @map("bubreddit_id")
+  subreddit   Subreddit  @relation(fields: [subredditId], references: [id])
+  Comments    Comments[]
+  Vote        Vote[]
+}
+
+model Comments {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  text      String
+
+  postId Int  @map("post_id")
+  post   Post @relation(fields: [postId], references: [id])
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+}
+
+model Vote {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  upvote    Boolean
+
+  postId Int  @map("post_id")
+  post   Post @relation(fields: [postId], references: [id])
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+}
+
+enum AttachmentType {
+  IMAGE
+  FILE
+}
+
+enum Provider {
+  DISCORD
+  GOOGLE
+  CREDENTIALS
+}
+
+enum MessageType {
+  STANDALONE_MESSAGE
+  SHARED_MESSAGE
+  ANSWERED_MESSAGE
+  SYSTEM_MESSAGE
+
+  @@map("message_type")
+}
+
+enum ParticipantRole {
+  USER
+  MODERATOR
+  ADMIN
+
+  @@map("participant_role")
+}
+
+enum ConversationType {
+  PRIVATE
+  GROUP
+}
