@@ -3,6 +3,7 @@ import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import { ThemeProvider } from 'next-themes';
 import { ReactNode, useState } from 'react';
+import { Toaster } from 'react-hot-toast';
 
 export function AppProvider({
     session,
@@ -16,6 +17,7 @@ export function AppProvider({
         <SessionProvider session={session}>
             <ThemeProvider>
                 <QueryClientProvider client={queryClient}>
+                    <Toaster />
                     {children}
                 </QueryClientProvider>
             </ThemeProvider>

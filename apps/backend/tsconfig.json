@@ -34,6 +34,9 @@
             "@events": ["src/events"],
             "@events/*": ["src/events/*"],
 
+            "@posts": ["src/posts"],
+            "@posts/*": ["src/posts/*"],
+
             "@common": ["libs/common/src"],
             "@common/*": ["libs/common/src/*"]
         }

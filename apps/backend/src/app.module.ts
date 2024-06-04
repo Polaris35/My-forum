@@ -1,15 +1,16 @@
 import { Module } from '@nestjs/common';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from '@users/users.module';
 import { ConfigModule } from '@nestjs/config';
-import { PrismaModule } from './prisma/prisma.module';
-import { AuthModule } from './auth/auth.module';
+import { PrismaModule } from '@prisma/prisma.module';
+import { AuthModule } from '@auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
-import { EventsModule } from './events/events.module';
+import { EventsModule } from '@events/events.module';
 import { MessagingModule } from '@messaging/messaging.module';
 import { JwtModule } from '@nestjs/jwt';
 import { options } from '@auth/config';
-import { AttachmentsModule } from './attachments/attachments.module';
+import { AttachmentsModule } from '@attachments/attachments.module';
+import { PostsModule } from '@posts/posts.module';
 
 @Module({
     imports: [
@@ -23,6 +24,7 @@ import { AttachmentsModule } from './attachments/attachments.module';
         JwtModule.registerAsync(options()),
         EventsModule,
         AttachmentsModule,
+        PostsModule,
     ],
     providers: [
         {

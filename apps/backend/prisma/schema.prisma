@@ -110,8 +110,8 @@ model Post {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at")
   title     String
-  body      String
-  image     Int
+  body      String?
+  image     Int?
 
   userId      Int        @map("user_id")
   creator     User       @relation(fields: [userId], references: [id])

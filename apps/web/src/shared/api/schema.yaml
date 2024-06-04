@@ -430,6 +430,23 @@ paths:
                 $ref: '#/components/schemas/ResponseUserWithTokens'
       tags:
         - Auth
+  /api/post:
+    post:
+      operationId: PostsController_createPost
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePostDto'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - Posts
+      security:
+        - bearer: []
 info:
   title: My-chat
   description: ''
@@ -676,3 +693,19 @@ components:
       required:
         - accessToken
         - refreshToken
+    CreatePostDto:
+      type: object
+      properties:
+        title:
+          type: string
+        body:
+          type: string
+        subreddit:
+          type: string
+        imageId:
+          type: number
+      required:
+        - title
+        - body
+        - subreddit
+        - imageId

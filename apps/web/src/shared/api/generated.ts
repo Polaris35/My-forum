@@ -43,6 +43,13 @@ export type AttachmentsControllerUploadFileBody = {
     file?: Blob;
 };
 
+export interface CreatePostDto {
+    body: string;
+    imageId: number;
+    subreddit: string;
+    title: string;
+}
+
 export interface Tokens {
     accessToken: string;
     refreshToken: string;
@@ -446,6 +453,21 @@ export const authControllerGoogleAuth = (
     );
 };
 
+export const postsControllerCreatePost = (
+    createPostDto: BodyType<CreatePostDto>,
+    options?: SecondParameter<typeof createInstance>,
+) => {
+    return createInstance<void>(
+        {
+            url: `/api/post`,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            data: createPostDto,
+        },
+        options,
+    );
+};
+
 export type UsersControllerFindByIdResult = NonNullable<
     Awaited<ReturnType<typeof usersControllerFindById>>
 >;
@@ -517,4 +539,7 @@ export type AuthControllerRefreshTokensResult = NonNullable<
 >;
 export type AuthControllerGoogleAuthResult = NonNullable<
     Awaited<ReturnType<typeof authControllerGoogleAuth>>
+>;
+export type PostsControllerCreatePostResult = NonNullable<
+    Awaited<ReturnType<typeof postsControllerCreatePost>>
 >;
