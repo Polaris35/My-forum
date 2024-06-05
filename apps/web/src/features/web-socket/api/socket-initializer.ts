@@ -5,6 +5,7 @@ import {
 import {
     ConversationPreviewListResponse,
     ConversationPreviewResponse,
+    MessageResponse,
 } from '@/shared/api';
 import { CONVERSATION } from '@/shared/constants';
 import { useQueryClient } from '@tanstack/react-query';
@@ -77,7 +78,7 @@ export function SocketInitializer() {
                 // );
             },
         );
-        socketRef.current.on('new-message', (data: any) => {
+        socketRef.current.on('new-message', (data: MessageResponse) => {
             console.log('new-message in conversationId: ', conversationId);
 
             if (data.conversationId === conversationId) {
@@ -87,6 +88,27 @@ export function SocketInitializer() {
                     payload: [{ ...data, status: 'sended' }],
                 });
             }
+
+            queryClient.setQueriesData<ConversationPreviewListResponse>(
+                { queryKey: [CONVERSATION.LIST] },
+                (oldList) => {
+                    const conversations =
+                        oldList?.conversations.map((conversation) => {
+                            if (conversationId === conversation.id) {
+                                return {
+                                    ...conversation,
+                                    message: data.message,
+                                    senderName: data.senderName,
+                                    time: data.createdAt,
+                                };
+                            }
+                            return conversation;
+                        }) || [];
+                    return {
+                        conversations: conversations,
+                    };
+                },
+            );
         });
         socketRef.current.on('delete-message', (data: any) => {
             console.log('delete-message', data);

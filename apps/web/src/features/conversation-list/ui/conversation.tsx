@@ -57,7 +57,7 @@ export function Conversation({
                     id,
                 });
             }}
-            className="flex items-center gap-4 p-2 border-y border-neutral border-collapse mt-[-1px] cursor-pointer hover:bg-base-200"
+            className="flex items-center gap-4 p-2 border-y border-neutral border-collapse mt-[-1px] cursor-pointer hover:bg-base-200 min-h-[66px]"
         >
             <UiAvatar url={avatarUrl} size={'medium'} />
             <div className="flex flex-col gap-1 justify-around flex-1">
@@ -89,13 +89,13 @@ export function Conversation({
                         </div>
                     )}
 
-                    <div
+                    {/* <div
                         className={`bg-neutral p-1 rounded-full min-h-6 px-2 ${isUnreaded}`}
                     >
                         <span className="text-neutral-content text-sm">
                             {messageCount}
                         </span>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
