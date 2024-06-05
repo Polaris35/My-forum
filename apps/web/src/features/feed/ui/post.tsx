@@ -1,5 +1,6 @@
 import { UiAvatar } from '@/shared/ui';
 import { getAttachmentUrl, getFullUrl } from '@/shared/utils';
+import clsx from 'clsx';
 import Link from 'next/link';
 import { BsChat } from 'react-icons/bs';
 import { FaArrowDown, FaArrowUp, FaRegBookmark } from 'react-icons/fa6';
@@ -17,6 +18,7 @@ type PostProps = {
     subredditTopic: string;
     votesCount: number;
     comentCount: number;
+    className?: string;
 };
 export function Post({
     userAvatar,
@@ -28,16 +30,21 @@ export function Post({
     comentCount,
     votesCount,
     subredditTopic,
+    className,
 }: PostProps) {
     return (
         <div
-            className="bg-base-100 flex rounded-md cursor-pointer border border-neutral shadow-md
-          hover:border-neutral-content"
+            className={clsx(
+                'bg-base-100 flex rounded-md cursor-pointer border border-neutral shadow-md hover:border-neutral-content',
+                className,
+            )}
         >
             {/* Votes */}
             <div className="flex flex-col items-center justify-start space-y-1 rounded-l-md p-4 text-neutral">
                 <FaArrowUp className="voteButtons hover:text-red-400" />
-                <p className="text-xs font-bold text-base-content">0</p>
+                <p className="text-xs font-bold text-base-content">
+                    {votesCount}
+                </p>
                 <FaArrowDown className="voteButtons hover:text-blue-400" />
             </div>
             <div className="p-3 pb-1">
@@ -99,19 +106,3 @@ export function Post({
         </div>
     );
 }
-
-/* <div className="flex flex-col">
-            <div className="flex">
-                <UiAvatar url={userAvatar} size={'small'} />
-                <p>{nickname}</p>
-                <p>{createdAt.toString()}</p>
-            </div>
-            <div>
-                <p className="text-xl">{title}</p>
-                <div className="flex">
-                    <p className="text-gray-500">{body}</p>
-                     {<img src="" alt={'image id: ' + imageId} /> }
-                </div>
-            </div>
-        </div> 
-*/

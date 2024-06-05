@@ -10,6 +10,10 @@ export type PostsControllerGetAllPostsParams = {
     subreddit?: string;
 };
 
+export type PostsControllerGetPostByIdParams = {
+    id: number;
+};
+
 export type AuthControllerGoogleAuthParams = {
     token: string;
 };
@@ -46,6 +50,34 @@ export type AttachmentsControllerUploadImageBody = {
 export type AttachmentsControllerUploadFileBody = {
     file?: Blob;
 };
+
+export interface CreateCommentDto {
+    comment: string;
+    postId: number;
+}
+
+export interface CommentResponse {
+    createdAt: string;
+    id: number;
+    text: string;
+    userAvatar: string;
+    username: string;
+}
+
+export interface PostDataResponse {
+    body: string;
+    comments: CommentResponse[];
+    commentsCount: number;
+    createdAt: string;
+    creatorAvatar: string;
+    creatorUsername: string;
+    id: number;
+    imageId: number;
+    subredditId: number;
+    subredditTopic: string;
+    title: string;
+    votesCount: number;
+}
 
 export interface PostResponse {
     body: string;
@@ -486,12 +518,37 @@ export const postsControllerCreatePost = (
     );
 };
 
+export const postsControllerGetPostById = (
+    params: PostsControllerGetPostByIdParams,
+    options?: SecondParameter<typeof createInstance>,
+) => {
+    return createInstance<PostDataResponse>(
+        { url: `/api/post`, method: 'GET', params },
+        options,
+    );
+};
+
 export const postsControllerGetAllPosts = (
     params?: PostsControllerGetAllPostsParams,
     options?: SecondParameter<typeof createInstance>,
 ) => {
     return createInstance<PostResponse[]>(
         { url: `/api/post/all`, method: 'GET', params },
+        options,
+    );
+};
+
+export const postsControllerAddComment = (
+    createCommentDto: BodyType<CreateCommentDto>,
+    options?: SecondParameter<typeof createInstance>,
+) => {
+    return createInstance<void>(
+        {
+            url: `/api/post/comment`,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            data: createCommentDto,
+        },
         options,
     );
 };
@@ -571,6 +628,12 @@ export type AuthControllerGoogleAuthResult = NonNullable<
 export type PostsControllerCreatePostResult = NonNullable<
     Awaited<ReturnType<typeof postsControllerCreatePost>>
 >;
+export type PostsControllerGetPostByIdResult = NonNullable<
+    Awaited<ReturnType<typeof postsControllerGetPostById>>
+>;
 export type PostsControllerGetAllPostsResult = NonNullable<
     Awaited<ReturnType<typeof postsControllerGetAllPosts>>
+>;
+export type PostsControllerAddCommentResult = NonNullable<
+    Awaited<ReturnType<typeof postsControllerAddComment>>
 >;

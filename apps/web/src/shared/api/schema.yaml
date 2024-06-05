@@ -447,6 +447,25 @@ paths:
         - Posts
       security:
         - bearer: []
+    get:
+      operationId: PostsController_getPostById
+      parameters:
+        - name: id
+          required: true
+          in: query
+          schema:
+            type: number
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostDataResponse'
+      tags:
+        - Posts
+      security:
+        - bearer: []
   /api/post/all:
     get:
       operationId: PostsController_getAllPosts
@@ -465,6 +484,23 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/PostResponse'
+      tags:
+        - Posts
+      security:
+        - bearer: []
+  /api/post/comment:
+    post:
+      operationId: PostsController_addComment
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCommentDto'
+      responses:
+        '201':
+          description: ''
       tags:
         - Posts
       security:
@@ -769,3 +805,76 @@ components:
         - commentsCount
         - creatorAvatar
         - creatorUsername
+    CommentResponse:
+      type: object
+      properties:
+        id:
+          type: number
+        text:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        userAvatar:
+          type: string
+        username:
+          type: string
+      required:
+        - id
+        - text
+        - createdAt
+        - userAvatar
+        - username
+    PostDataResponse:
+      type: object
+      properties:
+        id:
+          type: number
+        title:
+          type: string
+        body:
+          type: string
+        imageId:
+          type: number
+        createdAt:
+          format: date-time
+          type: string
+        subredditId:
+          type: number
+        subredditTopic:
+          type: string
+        votesCount:
+          type: number
+        commentsCount:
+          type: number
+        creatorAvatar:
+          type: string
+        creatorUsername:
+          type: string
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentResponse'
+      required:
+        - id
+        - title
+        - body
+        - imageId
+        - createdAt
+        - subredditId
+        - subredditTopic
+        - votesCount
+        - commentsCount
+        - creatorAvatar
+        - creatorUsername
+        - comments
+    CreateCommentDto:
+      type: object
+      properties:
+        comment:
+          type: string
+        postId:
+          type: number
+      required:
+        - comment
+        - postId
