@@ -1,7 +1,4 @@
-import {
-    attachmentsControllerUploadImage,
-    postsControllerCreatePost,
-} from '@/shared/api';
+import { attachmentsControllerUploadImage } from '@/shared/api';
 import { UiAvatar } from '@/shared/ui';
 import { getAttachmentUrl } from '@/shared/utils';
 import { useSession } from 'next-auth/react';
@@ -10,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { FaLink } from 'react-icons/fa6';
 import { HiOutlinePhotograph } from 'react-icons/hi';
+import { UseCreatePostMutation } from '../api/use-create-post-mutation';
 
 type FormData = {
     postTitle: string;
@@ -17,6 +15,7 @@ type FormData = {
     subreddit: string;
 };
 export function PostBox() {
+    const mutation = UseCreatePostMutation();
     const { data: session } = useSession();
     const {
         register,
@@ -43,19 +42,12 @@ export function PostBox() {
                 image: selectedFile,
             });
         }
-        await postsControllerCreatePost(
-            {
-                title: data.postTitle,
-                body: data.postBody,
-                subreddit: data.subreddit,
-                imageId: imageId!,
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${session?.user.accessToken}`,
-                },
-            },
-        );
+        await mutation.mutateAsync({
+            title: data.postTitle,
+            body: data.postBody,
+            subreddit: data.subreddit,
+            imageId: imageId!,
+        });
         setValue('postTitle', '');
         setValue('postBody', '');
         setValue('subreddit', '');
@@ -65,10 +57,13 @@ export function PostBox() {
     return (
         <form
             onSubmit={onSubmit}
-            className="sticky top-16 z-50 rounded-md p-2 bg-base-100 block"
+            className="sticky top-[65px] z-50 rounded-md p-2 bg-base-100 block"
         >
             <div className="flex items-center space-x-3">
-                <UiAvatar url={session?.user?.image!} size={'small'} />
+                <UiAvatar
+                    url={session ? session?.user?.image! : getAttachmentUrl(1)}
+                    size={'small'}
+                />
                 <input
                     {...register('postTitle', { required: true })}
                     disabled={!session}

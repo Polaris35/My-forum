@@ -15,7 +15,7 @@ export function HomePageHeader() {
     const { data: session } = useSession();
     const router = useRouter();
     return (
-        <div className="sticky top-0 z-50 flex px-4 py-2 shadow-sm items-center bg-base-100 border-b border-base-content">
+        <div className="sticky top-0 z-50 flex px-4 py-2 shadow-sm items-center bg-base-100 border-b border-neutral">
             {/* Logo */}
             <div className="flex h-10 items-center flex-shrink-0 cursor-pointer">
                 <Image

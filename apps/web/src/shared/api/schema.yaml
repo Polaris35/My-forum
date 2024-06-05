@@ -447,6 +447,23 @@ paths:
         - Posts
       security:
         - bearer: []
+  /api/post/all:
+    get:
+      operationId: PostsController_getAllPosts
+      parameters: []
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostResponse'
+      tags:
+        - Posts
+      security:
+        - bearer: []
 info:
   title: My-chat
   description: ''
@@ -709,3 +726,41 @@ components:
         - body
         - subreddit
         - imageId
+    PostResponse:
+      type: object
+      properties:
+        id:
+          type: number
+        title:
+          type: string
+        body:
+          type: string
+        imageId:
+          type: number
+        createdAt:
+          format: date-time
+          type: string
+        subredditId:
+          type: number
+        subredditTopic:
+          type: string
+        votesCount:
+          type: number
+        commentsCount:
+          type: number
+        creatorAvatar:
+          type: string
+        creatorUsername:
+          type: string
+      required:
+        - id
+        - title
+        - body
+        - imageId
+        - createdAt
+        - subredditId
+        - subredditTopic
+        - votesCount
+        - commentsCount
+        - creatorAvatar
+        - creatorUsername

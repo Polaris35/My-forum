@@ -43,6 +43,20 @@ export type AttachmentsControllerUploadFileBody = {
     file?: Blob;
 };
 
+export interface PostResponse {
+    body: string;
+    commentsCount: number;
+    createdAt: string;
+    creatorAvatar: string;
+    creatorUsername: string;
+    id: number;
+    imageId: number;
+    subredditId: number;
+    subredditTopic: string;
+    title: string;
+    votesCount: number;
+}
+
 export interface CreatePostDto {
     body: string;
     imageId: number;
@@ -468,6 +482,15 @@ export const postsControllerCreatePost = (
     );
 };
 
+export const postsControllerGetAllPosts = (
+    options?: SecondParameter<typeof createInstance>,
+) => {
+    return createInstance<PostResponse[]>(
+        { url: `/api/post/all`, method: 'GET' },
+        options,
+    );
+};
+
 export type UsersControllerFindByIdResult = NonNullable<
     Awaited<ReturnType<typeof usersControllerFindById>>
 >;
@@ -542,4 +565,7 @@ export type AuthControllerGoogleAuthResult = NonNullable<
 >;
 export type PostsControllerCreatePostResult = NonNullable<
     Awaited<ReturnType<typeof postsControllerCreatePost>>
+>;
+export type PostsControllerGetAllPostsResult = NonNullable<
+    Awaited<ReturnType<typeof postsControllerGetAllPosts>>
 >;

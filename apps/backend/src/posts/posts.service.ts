@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
 import { CreatePostDto } from './dto';
+import { PostResponse } from './responses/post.response';
+import { FileUrlUtils } from '@common/utils';
 
 @Injectable()
 export class PostsService {
@@ -39,6 +41,62 @@ export class PostsService {
                 },
                 image: dto.imageId,
             },
+        });
+    }
+    async getAllPosts(): Promise<PostResponse[]> {
+        const posts = await this.prismaService.post.findMany({
+            orderBy: {
+                createdAt: 'desc',
+            },
+            select: {
+                id: true,
+                title: true,
+                body: true,
+                subreddit: {
+                    select: {
+                        id: true,
+                        topic: true,
+                    },
+                },
+                image: true,
+                creator: {
+                    select: {
+                        image: true,
+                        name: true,
+                    },
+                },
+                Vote: {
+                    select: {
+                        upvote: true,
+                    },
+                },
+                _count: {
+                    select: {
+                        Comments: true,
+                    },
+                },
+                createdAt: true,
+            },
+        });
+
+        return posts.map((post) => {
+            return {
+                id: post.id,
+                title: post.title,
+                body: post.body,
+                imageId: post.image,
+                createdAt: post.createdAt,
+                creatorAvatar: FileUrlUtils.getFileUrl(post.creator.image),
+                creatorUsername: post.creator.name,
+
+                subredditId: post.subreddit.id,
+                subredditTopic: post.subreddit.topic,
+                votesCount: post.Vote.reduce(
+                    (sum, current) => (current.upvote ? sum++ : sum--),
+                    0,
+                ),
+                commentsCount: post._count.Comments,
+            };
         });
     }
 }
