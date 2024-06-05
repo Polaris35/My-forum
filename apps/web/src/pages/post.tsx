@@ -30,6 +30,7 @@ export function PostPage() {
             {/* Page content */}
             <div className="my-7 max-w-5xl mx-auto">
                 <Post
+                    id={query.data?.id!}
                     className="hover:border-neutral cursor-default"
                     userAvatar={''}
                     nickname={query.data?.creatorUsername!}

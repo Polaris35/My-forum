@@ -6,6 +6,8 @@ import { FileUrlUtils } from '@common/utils';
 import { PostResponseRaw } from './select-query';
 import { CommentResponse } from './responses/commnet.response';
 import { PostDataResponse } from './responses/post-data.response';
+import { UpvoteResponse } from './responses/upvote.response';
+import { UpvoteDto } from './dto/upvote.dto';
 
 @Injectable()
 export class PostsService {
@@ -159,6 +161,57 @@ export class PostsService {
                 userAvatar: FileUrlUtils.getFileUrl(comment.user.image),
                 username: comment.user.name,
             };
+        });
+    }
+    async getVotes(postId: number): Promise<UpvoteResponse[]> {
+        const votes = await this.prismaService.vote.findMany({
+            where: {
+                post: {
+                    id: postId,
+                },
+            },
+            orderBy: {
+                createdAt: 'desc',
+            },
+            select: {
+                id: true,
+                userId: true,
+                upvote: true,
+            },
+        });
+        return votes.map((vote) => {
+            return {
+                id: vote.id,
+                userId: vote.userId,
+                vote: vote.upvote,
+            };
+        });
+    }
+
+    upvote(dto: UpvoteDto, userId: number) {
+        return this.prismaService.vote.upsert({
+            where: {
+                postId_userId: {
+                    postId: dto.postId,
+                    userId: userId,
+                },
+            },
+            update: {
+                upvote: dto.vote,
+            },
+            create: {
+                post: {
+                    connect: {
+                        id: dto.postId,
+                    },
+                },
+                user: {
+                    connect: {
+                        id: userId,
+                    },
+                },
+                upvote: dto.vote,
+            },
         });
     }
 }

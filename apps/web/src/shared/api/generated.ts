@@ -6,6 +6,10 @@
  */
 import { createInstance } from './api-instace';
 import type { BodyType } from './api-instace';
+export type PostsControllerGetVotesParams = {
+    postId: number;
+};
+
 export type PostsControllerGetAllPostsParams = {
     subreddit?: string;
 };
@@ -50,6 +54,17 @@ export type AttachmentsControllerUploadImageBody = {
 export type AttachmentsControllerUploadFileBody = {
     file?: Blob;
 };
+
+export interface UpvoteDto {
+    postId: number;
+    vote: boolean;
+}
+
+export interface UpvoteResponse {
+    id: number;
+    userId: number;
+    vote: boolean;
+}
 
 export interface CreateCommentDto {
     comment: string;
@@ -553,6 +568,31 @@ export const postsControllerAddComment = (
     );
 };
 
+export const postsControllerGetVotes = (
+    params: PostsControllerGetVotesParams,
+    options?: SecondParameter<typeof createInstance>,
+) => {
+    return createInstance<UpvoteResponse[]>(
+        { url: `/api/post/votes`, method: 'GET', params },
+        options,
+    );
+};
+
+export const postsControllerUpvote = (
+    upvoteDto: BodyType<UpvoteDto>,
+    options?: SecondParameter<typeof createInstance>,
+) => {
+    return createInstance<void>(
+        {
+            url: `/api/post/upvote`,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            data: upvoteDto,
+        },
+        options,
+    );
+};
+
 export type UsersControllerFindByIdResult = NonNullable<
     Awaited<ReturnType<typeof usersControllerFindById>>
 >;
@@ -636,4 +676,10 @@ export type PostsControllerGetAllPostsResult = NonNullable<
 >;
 export type PostsControllerAddCommentResult = NonNullable<
     Awaited<ReturnType<typeof postsControllerAddComment>>
+>;
+export type PostsControllerGetVotesResult = NonNullable<
+    Awaited<ReturnType<typeof postsControllerGetVotes>>
+>;
+export type PostsControllerUpvoteResult = NonNullable<
+    Awaited<ReturnType<typeof postsControllerUpvote>>
 >;

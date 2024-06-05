@@ -1,4 +1,4 @@
-import { UiAvatar } from '@/shared/ui';
+import { UiAvatar, UiSpinner } from '@/shared/ui';
 import { getAttachmentUrl, getFullUrl } from '@/shared/utils';
 import clsx from 'clsx';
 import Link from 'next/link';
@@ -7,8 +7,15 @@ import { FaArrowDown, FaArrowUp, FaRegBookmark } from 'react-icons/fa6';
 import { GoShareAndroid } from 'react-icons/go';
 import { RxDotsHorizontal } from 'react-icons/rx';
 import TimeAgo from 'react-timeago';
+import { UseUpvoteQuery } from '../api/use-upvote-query';
+import { UseUpvoteMutation } from '../api/use-upvote-mutation';
+import toast from 'react-hot-toast';
+import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
+import { UpvoteResponse } from '@/shared/api';
 
 type PostProps = {
+    id: number;
     userAvatar: string;
     nickname: string;
     createdAt: string;
@@ -21,6 +28,7 @@ type PostProps = {
     className?: string;
 };
 export function Post({
+    id,
     userAvatar,
     nickname,
     createdAt,
@@ -32,6 +40,59 @@ export function Post({
     subredditTopic,
     className,
 }: PostProps) {
+    const [vote, setVote] = useState<boolean | null>();
+    const voteQuery = UseUpvoteQuery(id);
+    const mutation = UseUpvoteMutation();
+    const { data: session } = useSession();
+
+    const upvote = async (isUpvote: boolean) => {
+        if (!session) {
+            toast("You'll need to sign in to Vote!");
+            return;
+        }
+        if (vote && isUpvote) return;
+        if (vote === false && !isUpvote) return;
+        if (
+            voteQuery?.data?.some(
+                (vote) =>
+                    vote.userId === session.user.id && vote.vote === isUpvote,
+            )
+        ) {
+            return;
+        }
+
+        console.log('Voting...', isUpvote);
+
+        await mutation.mutateAsync({ vote: isUpvote, postId: id });
+        voteQuery.refetch();
+    };
+
+    const displayVotes = (data: UpvoteResponse[]) => {
+        const displayNumber = data.reduce(
+            (sum, current) => (current.vote === true ? (sum += 1) : (sum -= 1)),
+            0,
+        );
+
+        if (data.length === 0) return 0;
+        if (displayNumber === 0) {
+            return data[0]?.vote ? 1 : -1;
+        }
+
+        return displayNumber;
+    };
+
+    useEffect(() => {
+        const votes = voteQuery?.data;
+
+        //Latest votes coming fro SQL query
+        //We set vote to true, false or undefined with optional chaining using .find
+        const vote = votes?.find(
+            (vote) => vote.userId == session?.user?.id,
+        )?.vote;
+
+        setVote(vote);
+    }, [voteQuery.data]);
+
     return (
         <div
             className={clsx(
@@ -41,11 +102,31 @@ export function Post({
         >
             {/* Votes */}
             <div className="flex flex-col items-center justify-start space-y-1 rounded-l-md p-4 text-neutral">
-                <FaArrowUp className="voteButtons hover:text-red-400" />
+                <button
+                    onClick={() => {
+                        upvote(true);
+                    }}
+                >
+                    <FaArrowUp
+                        className={`voteButtons hover:text-red-400 ${
+                            vote && 'text-blue-500'
+                        }`}
+                    />
+                </button>
                 <p className="text-xs font-bold text-base-content">
-                    {votesCount}
+                    {voteQuery.isSuccess && displayVotes(voteQuery?.data!)}
                 </p>
-                <FaArrowDown className="voteButtons hover:text-blue-400" />
+                <button
+                    onClick={() => {
+                        upvote(false);
+                    }}
+                >
+                    <FaArrowDown
+                        className={`voteButtons hover:text-blue-400 ${
+                            vote === false && 'text-red-400'
+                        }`}
+                    />
+                </button>
             </div>
             <div className="p-3 pb-1">
                 {/* Header */}

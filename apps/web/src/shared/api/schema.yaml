@@ -505,6 +505,45 @@ paths:
         - Posts
       security:
         - bearer: []
+  /api/post/votes:
+    get:
+      operationId: PostsController_getVotes
+      parameters:
+        - name: postId
+          required: true
+          in: query
+          schema:
+            type: number
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UpvoteResponse'
+      tags:
+        - Posts
+      security:
+        - bearer: []
+  /api/post/upvote:
+    post:
+      operationId: PostsController_upvote
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpvoteDto'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - Posts
+      security:
+        - bearer: []
 info:
   title: My-chat
   description: ''
@@ -878,3 +917,26 @@ components:
       required:
         - comment
         - postId
+    UpvoteResponse:
+      type: object
+      properties:
+        id:
+          type: number
+        userId:
+          type: number
+        vote:
+          type: boolean
+      required:
+        - id
+        - userId
+        - vote
+    UpvoteDto:
+      type: object
+      properties:
+        postId:
+          type: number
+        vote:
+          type: boolean
+      required:
+        - postId
+        - vote

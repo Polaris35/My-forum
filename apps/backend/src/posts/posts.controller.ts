@@ -12,6 +12,8 @@ import { CurrentUser, Public } from '@common/decorators';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PostResponse } from './responses/post.response';
 import { PostDataResponse } from './responses/post-data.response';
+import { UpvoteResponse } from './responses/upvote.response';
+import { UpvoteDto } from './dto/upvote.dto';
 
 @Controller('post')
 @ApiTags('Posts')
@@ -62,6 +64,26 @@ export class PostsController {
     ) {
         console.log(dto);
         return this.postService.addComment(dto, userId);
+    }
+
+    @Public()
+    @Get('votes')
+    @ApiResponse({
+        type: UpvoteResponse,
+        isArray: true,
+    })
+    @ApiQuery({
+        name: 'postId',
+        type: Number,
+        required: true,
+    })
+    getVotes(@Query('postId', ParseIntPipe) postId: number) {
+        return this.postService.getVotes(postId);
+    }
+
+    @Post('upvote')
+    upvote(@Body() dto: UpvoteDto, @CurrentUser('id') userId: number) {
+        return this.postService.upvote(dto, userId);
     }
 
     // @Public()
