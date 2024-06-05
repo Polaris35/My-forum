@@ -45,92 +45,99 @@ export function MessageList({ className }: MessageListProps) {
                     }
                     scrollableTarget="scrollableDiv"
                 >
-                    {messages.messages.map((message) => {
-                        if (
-                            message.type === MessageResponseType.SYSTEM_MESSAGE
-                        ) {
-                            return (
-                                <div
-                                    key={message.id}
-                                    className="flex justify-center pb-2"
-                                >
-                                    <div className="badge badge-neutral">
-                                        {message.message}
+                    {messages.messages
+                        .sort(
+                            (a, b) =>
+                                new Date(b.createdAt).getTime() -
+                                new Date(a.createdAt).getTime(),
+                        )
+                        .map((message) => {
+                            if (
+                                message.type ===
+                                MessageResponseType.SYSTEM_MESSAGE
+                            ) {
+                                return (
+                                    <div
+                                        key={message.id}
+                                        className="flex justify-center pb-2"
+                                    >
+                                        <div className="badge badge-neutral">
+                                            {message.message}
+                                        </div>
                                     </div>
-                                </div>
-                            );
-                        }
-                        switch (message.attachmentType) {
-                            case MessageResponseAttachmentType.IMAGE: {
-                                return (
-                                    <ImageMessage
-                                        key={message.id}
-                                        avatarUrl={message.senderAvatarUrl}
-                                        autor={message.senderName}
-                                        time={message.createdAt}
-                                        message={message.message}
-                                        status={
-                                            message.isReaded
-                                                ? 'readed'
-                                                : 'sended'
-                                        }
-                                        type={
-                                            message.senderId ===
-                                            session.data?.user.id
-                                                ? 'send'
-                                                : 'recive'
-                                        }
-                                        imageIds={message.attachmentList}
-                                    />
                                 );
                             }
-                            case MessageResponseAttachmentType.FILE: {
-                                return (
-                                    <FileMessage
-                                        key={message.id}
-                                        avatarUrl={message.senderAvatarUrl}
-                                        autor={message.senderName}
-                                        time={message.createdAt}
-                                        message={message.message}
-                                        status={
-                                            message.isReaded
-                                                ? 'readed'
-                                                : 'sended'
-                                        }
-                                        type={
-                                            message.senderId ===
-                                            session.data?.user.id
-                                                ? 'send'
-                                                : 'recive'
-                                        }
-                                        fileIds={message.attachmentList}
-                                    />
-                                );
+                            switch (message.attachmentType) {
+                                case MessageResponseAttachmentType.IMAGE: {
+                                    return (
+                                        <ImageMessage
+                                            key={message.id}
+                                            avatarUrl={message.senderAvatarUrl}
+                                            autor={message.senderName}
+                                            time={message.createdAt}
+                                            message={message.message}
+                                            status={
+                                                message.isReaded
+                                                    ? 'readed'
+                                                    : 'sended'
+                                            }
+                                            type={
+                                                message.senderId ===
+                                                session.data?.user.id
+                                                    ? 'send'
+                                                    : 'recive'
+                                            }
+                                            imageIds={message.attachmentList}
+                                        />
+                                    );
+                                }
+                                case MessageResponseAttachmentType.FILE: {
+                                    return (
+                                        <FileMessage
+                                            key={message.id}
+                                            avatarUrl={message.senderAvatarUrl}
+                                            autor={message.senderName}
+                                            time={message.createdAt}
+                                            message={message.message}
+                                            status={
+                                                message.isReaded
+                                                    ? 'readed'
+                                                    : 'sended'
+                                            }
+                                            type={
+                                                message.senderId ===
+                                                session.data?.user.id
+                                                    ? 'send'
+                                                    : 'recive'
+                                            }
+                                            fileIds={message.attachmentList}
+                                        />
+                                    );
+                                }
+                                default: {
+                                    return (
+                                        <Message
+                                            key={message.id}
+                                            avatarUrl={message.senderAvatarUrl}
+                                            autor={message.senderName}
+                                            time={message.createdAt}
+                                            message={message.message}
+                                            status={
+                                                message.isReaded
+                                                    ? 'readed'
+                                                    : 'sended'
+                                            }
+                                            type={
+                                                message.senderId ===
+                                                session.data?.user.id
+                                                    ? 'send'
+                                                    : 'recive'
+                                            }
+                                        />
+                                    );
+                                }
                             }
-                            default: {
-                                return (
-                                    <Message
-                                        key={message.id}
-                                        avatarUrl={message.senderAvatarUrl}
-                                        autor={message.senderName}
-                                        time={message.createdAt}
-                                        message={message.message}
-                                        status={
-                                            message.isReaded
-                                                ? 'readed'
-                                                : 'sended'
-                                        }
-                                        type={
-                                            message.senderId ===
-                                            session.data?.user.id
-                                                ? 'send'
-                                                : 'recive'
-                                        }
-                                    />
-                                );
-                            }
-                        }
-                    })}
+                        })}
                 </InfiniteScroll>
             ) : (
                 <div className="flex items-center justify-center">

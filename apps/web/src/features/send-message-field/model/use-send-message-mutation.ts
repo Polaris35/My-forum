@@ -12,7 +12,7 @@ import { useSession } from 'next-auth/react';
 import { useContext } from 'react';
 
 export function UseSendMessageMutation() {
-    const { dispatchMessages } = useContext(CurrentConversationContext);
+    // const { dispatchMessages } = useContext(CurrentConversationContext);
     const session = useSession();
     return useMutation({
         mutationFn: (dto: CreateMessageDto) =>
@@ -21,11 +21,11 @@ export function UseSendMessageMutation() {
                     Authorization: 'Bearer ' + session.data?.user.accessToken,
                 },
             }),
-        onSuccess(data) {
-            dispatchMessages({
-                type: MessageActionKind.ADD,
-                payload: { ...data, status: 'sended' },
-            });
-        },
+        // onSuccess(data) {
+        //     dispatchMessages({
+        //         type: MessageActionKind.ADD,
+        //         payload: [{ ...data, status: 'sended' }],
+        //     });
+        // },
     });
 }

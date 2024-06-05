@@ -2,7 +2,7 @@ import { CurrentConversationContext } from '@/entities/current-conversation';
 import { ConversationPreviewResponseMessageType } from '@/shared/api';
 import { UiAvatar } from '@/shared/ui';
 import { DateTime } from 'luxon';
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 
 type ConversationProps = {
     id: number;
@@ -38,9 +38,25 @@ export function Conversation({
         DateTime.now().diff(messageDate, 'days').days >= 1
             ? 'D, hh:mm'
             : 'hh:mm';
+
+    const callback = () => {
+        setConversationId(id);
+        console.log({
+            setConversationId,
+            conversationId,
+            id,
+        });
+    };
     return (
         <div
-            onClick={() => setConversationId(id)}
+            onClick={() => {
+                setConversationId(id);
+                console.log({
+                    setConversationId,
+                    conversationId,
+                    id,
+                });
+            }}
             className="flex items-center gap-4 p-2 border-y border-neutral border-collapse mt-[-1px] cursor-pointer hover:bg-base-200"
         >
             <UiAvatar url={avatarUrl} size={'medium'} />
