@@ -39,11 +39,16 @@ export function Post({
                 <p className="text-xs font-bold text-base-content">0</p>
                 <FaArrowDown className="voteButtons hover:text-blue-400" />
             </div>
-
             <div className="p-3 pb-1">
                 {/* Header */}
                 <div className="flex items-center space-x-2">
-                    <UiAvatar url={userAvatar} size={'small'} />
+                    <div className="avatar">
+                        <div className="w-10 h-10 rounded-full">
+                            <img
+                                src={`https://api.dicebear.com/8.x/bottts-neutral/svg?seed=${subredditTopic}`}
+                            />
+                        </div>
+                    </div>
                     <p className="text-xs text-neutral-content">
                         <span className="font-bold hover:link-primary">
                             r/{subredditTopic}
