@@ -4,10 +4,13 @@ import { useQuery } from '@tanstack/react-query';
 import { Post } from './post';
 import { POST } from '@/shared/constants';
 
-export function Feed() {
+type FeedProps = {
+    subreddit?: string;
+};
+export function Feed({ subreddit }: FeedProps) {
     const query = useQuery({
-        queryKey: [POST.ALL],
-        queryFn: postsControllerGetAllPosts,
+        queryKey: [POST.ALL, subreddit],
+        queryFn: () => postsControllerGetAllPosts({ subreddit }),
     });
     if (query.isLoading) {
         return (

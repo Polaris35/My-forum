@@ -14,7 +14,10 @@ type FormData = {
     postBody: string;
     subreddit: string;
 };
-export function PostBox() {
+type PostBoxProps = {
+    subreddit?: string;
+};
+export function PostBox({ subreddit }: PostBoxProps) {
     const mutation = UseCreatePostMutation();
     const { data: session } = useSession();
     const {
@@ -45,7 +48,7 @@ export function PostBox() {
         await mutation.mutateAsync({
             title: data.postTitle,
             body: data.postBody,
-            subreddit: data.subreddit,
+            subreddit: subreddit || data.subreddit,
             imageId: imageId!,
         });
         setValue('postTitle', '');
@@ -71,7 +74,9 @@ export function PostBox() {
                     className="input input-ghost flex-1"
                     placeholder={
                         session
-                            ? 'Create a post by entering title!'
+                            ? subreddit
+                                ? `Create a post in r/${subreddit}`
+                                : 'Create a post by entering title!'
                             : 'Sign in to post'
                     }
                 />
@@ -101,15 +106,17 @@ export function PostBox() {
                     </div>
 
                     {/* Subreddit */}
-                    <div className="flex items-center px-2">
-                        <p className="min-w-[90px]">Subreddit:</p>
-                        <input
-                            {...register('subreddit')}
-                            className="m-2 p-2 flex-1 input input-primary"
-                            type="text"
-                            placeholder="i.e. reactjs"
-                        />
-                    </div>
+                    {!subreddit && (
+                        <div className="flex items-center px-2">
+                            <p className="min-w-[90px]">Subreddit:</p>
+                            <input
+                                {...register('subreddit')}
+                                className="m-2 p-2 flex-1 input input-primary"
+                                type="text"
+                                placeholder="i.e. reactjs"
+                            />
+                        </div>
+                    )}
 
                     {selectedFile && (
                         <div className="flex items-center px-2">

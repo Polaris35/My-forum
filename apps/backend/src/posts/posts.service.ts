@@ -43,8 +43,15 @@ export class PostsService {
             },
         });
     }
-    async getAllPosts(): Promise<PostResponse[]> {
+    async getAllPosts(subreddit?: string): Promise<PostResponse[]> {
         const posts = await this.prismaService.post.findMany({
+            where: {
+                ...(subreddit && {
+                    subreddit: {
+                        topic: subreddit,
+                    },
+                }),
+            },
             orderBy: {
                 createdAt: 'desc',
             },

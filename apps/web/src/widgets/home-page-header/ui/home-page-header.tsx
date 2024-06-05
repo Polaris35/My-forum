@@ -2,6 +2,7 @@ import { ROUTES } from '@/shared/constants';
 import { ThemeButton } from '@/shared/ui';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { BsStars } from 'react-icons/bs';
 import { FaChevronDown, FaHome } from 'react-icons/fa';
@@ -17,16 +18,20 @@ export function HomePageHeader() {
     return (
         <div className="sticky top-0 z-50 flex px-4 py-2 shadow-sm items-center bg-base-100 border-b border-neutral">
             {/* Logo */}
-            <div className="flex h-10 items-center flex-shrink-0 cursor-pointer">
-                <Image
-                    src="./app-logo.svg"
-                    objectFit="contain"
-                    height={40}
-                    width={40}
-                    alt="app-logo"
-                />
-                <p className="text-xl font-bold hidden lg:inline">My-forum</p>
-            </div>
+            <Link href="/">
+                <div className="flex h-10 items-center flex-shrink-0 cursor-pointer">
+                    <Image
+                        src="./app-logo.svg"
+                        objectFit="contain"
+                        height={40}
+                        width={40}
+                        alt="app-logo"
+                    />
+                    <p className="text-xl font-bold hidden lg:inline">
+                        My-forum
+                    </p>
+                </div>
+            </Link>
 
             {/* Home box */}
             <div className="flex items-center mx-7 gap-1 lg:gap-0">

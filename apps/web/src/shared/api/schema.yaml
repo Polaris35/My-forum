@@ -450,7 +450,12 @@ paths:
   /api/post/all:
     get:
       operationId: PostsController_getAllPosts
-      parameters: []
+      parameters:
+        - name: subreddit
+          required: false
+          in: query
+          schema:
+            type: string
       responses:
         default:
           description: ''

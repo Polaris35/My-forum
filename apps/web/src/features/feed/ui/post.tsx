@@ -1,5 +1,6 @@
 import { UiAvatar } from '@/shared/ui';
 import { getAttachmentUrl, getFullUrl } from '@/shared/utils';
+import Link from 'next/link';
 import { BsChat } from 'react-icons/bs';
 import { FaArrowDown, FaArrowUp, FaRegBookmark } from 'react-icons/fa6';
 import { GoShareAndroid } from 'react-icons/go';
@@ -50,9 +51,11 @@ export function Post({
                         </div>
                     </div>
                     <p className="text-xs text-neutral-content">
-                        <span className="font-bold hover:link-primary">
-                            r/{subredditTopic}
-                        </span>{' '}
+                        <Link href={`/subreddit/${subredditTopic}`}>
+                            <span className="font-bold hover:link-primary">
+                                r/{subredditTopic}
+                            </span>
+                        </Link>{' '}
                         * Posted by u/
                         {nickname} <TimeAgo date={createdAt} />
                     </p>

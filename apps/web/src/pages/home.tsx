@@ -8,7 +8,7 @@ export function HomePage() {
             <HomePageHeader />
 
             {/* Page content */}
-            <div className="my-7 max-w-3xl mx-auto">
+            <div className="my-7 max-w-5xl mx-auto">
                 <PostBox />
 
                 {/* Feed */}

@@ -6,6 +6,10 @@
  */
 import { createInstance } from './api-instace';
 import type { BodyType } from './api-instace';
+export type PostsControllerGetAllPostsParams = {
+    subreddit?: string;
+};
+
 export type AuthControllerGoogleAuthParams = {
     token: string;
 };
@@ -483,10 +487,11 @@ export const postsControllerCreatePost = (
 };
 
 export const postsControllerGetAllPosts = (
+    params?: PostsControllerGetAllPostsParams,
     options?: SecondParameter<typeof createInstance>,
 ) => {
     return createInstance<PostResponse[]>(
-        { url: `/api/post/all`, method: 'GET' },
+        { url: `/api/post/all`, method: 'GET', params },
         options,
     );
 };

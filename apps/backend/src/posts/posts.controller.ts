@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto';
 import { CurrentUser, Public } from '@common/decorators';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PostResponse } from './responses/post.response';
 
 @Controller('post')
@@ -22,7 +22,13 @@ export class PostsController {
         type: PostResponse,
         isArray: true,
     })
-    getAllPosts() {
-        return this.postService.getAllPosts();
+    @ApiQuery({
+        name: 'subreddit',
+        type: String,
+        required: false,
+    })
+    getAllPosts(@Query('subreddit') subreddit?: string) {
+        console.log(subreddit);
+        return this.postService.getAllPosts(subreddit);
     }
 }
