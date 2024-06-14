@@ -76,24 +76,24 @@ export function addGroupConversationMutation() {
                     Authorization: 'Bearer ' + session.data?.user.accessToken,
                 },
             }),
-        onSettled: (data) => {
-            if (!data) {
-                return;
-            }
-            queryClient.setQueriesData(
-                { queryKey: [CONVERSATION.LIST] },
-                (oldList) => {
-                    return {
-                        conversations: oldList
-                            ? [
-                                  ...(oldList as ConversationPreviewResponse[]),
-                                  data,
-                              ]
-                            : [data],
-                    };
-                },
-            );
-            setConversationId(data.id);
-        },
+        // onSettled: (data) => {
+        //     if (!data) {
+        //         return;
+        //     }
+        //     queryClient.setQueriesData(
+        //         { queryKey: [CONVERSATION.LIST] },
+        //         (oldList) => {
+        //             return {
+        //                 conversations: oldList
+        //                     ? [
+        //                           ...(oldList as ConversationPreviewResponse[]),
+        //                           data,
+        //                       ]
+        //                     : [data],
+        //             };
+        //         },
+        //     );
+        //     setConversationId(data.id);
+        // },
     });
 }

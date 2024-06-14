@@ -25,7 +25,7 @@ type PostProps = {
     subredditTopic: string;
     votesCount: number;
     comentCount: number;
-    className?: string;
+    isMainPost?: boolean;
 };
 export function Post({
     id,
@@ -38,7 +38,7 @@ export function Post({
     comentCount,
     votesCount,
     subredditTopic,
-    className,
+    isMainPost,
 }: PostProps) {
     const [vote, setVote] = useState<boolean | null>();
     const voteQuery = UseUpvoteQuery(id);
@@ -93,12 +93,12 @@ export function Post({
         setVote(vote);
     }, [voteQuery.data]);
 
+    const mainPostStyle = isMainPost
+        ? 'hover:border-neutral-content cursor-pointer'
+        : 'cursor-arrow';
     return (
         <div
-            className={clsx(
-                'bg-base-100 flex rounded-md cursor-pointer border border-neutral shadow-md hover:border-neutral-content',
-                className,
-            )}
+            className={`bg-base-100 flex rounded-md border border-neutral shadow-md ${mainPostStyle}`}
         >
             {/* Votes */}
             <div className="flex flex-col items-center justify-start space-y-1 rounded-l-md p-4 text-neutral">

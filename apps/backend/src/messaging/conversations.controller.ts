@@ -108,14 +108,6 @@ export class ConversationsController {
         return conversationsList;
     }
 
-    // @Get()
-    // @UseInterceptors(ClassSerializerInterceptor)
-    // async getConversationData(@Query('id') conversationId: number) {
-    //     const conversation =
-    //         await this.conversationsService.getConversation(+conversationId);
-    //     return new ConversationResponse(conversation);
-    // }
-
     @Delete(':id')
     deleteConversation(
         @CurrentUser('id') userId: number,

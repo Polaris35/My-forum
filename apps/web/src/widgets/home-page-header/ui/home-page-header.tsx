@@ -4,12 +4,9 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { BsStars } from 'react-icons/bs';
-import { FaChevronDown, FaHome } from 'react-icons/fa';
-import { FaEarthAmericas, FaRegBell } from 'react-icons/fa6';
 import { GiHamburgerMenu } from 'react-icons/gi';
+import { GoGear } from 'react-icons/go';
 import { IoSearch } from 'react-icons/io5';
-import { LiaVideoSolid } from 'react-icons/lia';
 import { LuMessageCircle } from 'react-icons/lu';
 
 export function HomePageHeader() {
@@ -21,7 +18,7 @@ export function HomePageHeader() {
             <Link href="/">
                 <div className="flex h-10 items-center flex-shrink-0 cursor-pointer">
                     <Image
-                        src="./app-logo.svg"
+                        src="/app-logo.svg"
                         objectFit="contain"
                         height={40}
                         width={40}
@@ -32,16 +29,31 @@ export function HomePageHeader() {
                     </p>
                 </div>
             </Link>
-
-            {/* Home box */}
-            <div className="flex items-center mx-7 gap-1 lg:gap-0">
-                <FaHome />
-                <p className="mx-2 hidden lg:inline">Home</p>
-                <FaChevronDown />
-            </div>
-
+            {/* Home box
+            <div className="dropdown">
+                <div
+                    tabIndex={0}
+                    role="button"
+                    className="flex items-center mx-7 gap-1 lg:gap-0"
+                >
+                    <FaHome />
+                    <p className="mx-2 hidden lg:inline">Home</p>
+                    <FaChevronDown />
+                </div>
+                <ul
+                    tabIndex={0}
+                    className="dropdown-content z-[9999] menu p-2 shadow bg-base-100 rounded-box w-52"
+                >
+                    <li>
+                        <a>Item 1</a>
+                    </li>
+                    <li>
+                        <a>Item 2</a>
+                    </li>
+                </ul>
+            </div> */}
             {/* Search box */}
-            <form className="input input-ghost flex items-center flex-1 space-x-2 ">
+            <form className="input input-ghost flex items-center flex-1 space-x-2 ml-6">
                 <IoSearch className="text-grey-500" />
                 <input
                     type="text"
@@ -50,23 +62,19 @@ export function HomePageHeader() {
                 />
                 <button type="submit" hidden />
             </form>
-
             {/* incons bar */}
             <div className="hidden lg:inline-flex items-center mx-5 gap-1 ">
-                <BsStars className="icon" />
-                <FaEarthAmericas className="icon" />
-                <LiaVideoSolid className="icon" />
-                <div className="divider divider-horizontal"></div>
+                <ThemeButton className="w-8 h-8" />
                 <button onClick={() => router.push(ROUTES.CHAT)}>
                     <LuMessageCircle className="icon" />
                 </button>
-                <FaRegBell className="icon" />
-                <ThemeButton />
+                <button onClick={() => router.push(ROUTES.PROFILE)}>
+                    <GoGear className="icon" />
+                </button>
             </div>
             <div className="ml-5 flex items-center lg:hidden">
                 <GiHamburgerMenu className="icon" />
             </div>
-
             {/* Sign-in/sign-out button */}
             {session ? (
                 <button
@@ -89,7 +97,7 @@ export function HomePageHeader() {
                 >
                     <div className="relative h-5 w-5">
                         <Image
-                            src="./app-logo.svg"
+                            src="/app-logo.svg"
                             layout="fill"
                             alt="app-logo"
                         />

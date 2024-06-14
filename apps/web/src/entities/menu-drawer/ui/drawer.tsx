@@ -35,7 +35,7 @@ export function Drawer() {
                                 alt="user avatar"
                             />
 
-                            <ThemeButton />
+                            <ThemeButton className="w-10 h-10" />
                         </div>
                         <div className="flex justify-between p-2 items-center">
                             <div className="flex flex-col g-2">

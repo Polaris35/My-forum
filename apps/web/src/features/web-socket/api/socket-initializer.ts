@@ -100,6 +100,7 @@ export function SocketInitializer() {
                                     message: data.message,
                                     senderName: data.senderName,
                                     time: data.createdAt,
+                                    messageType: 'standalone_message',
                                 };
                             }
                             return conversation;

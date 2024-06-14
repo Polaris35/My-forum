@@ -4,7 +4,6 @@ import {
     ConversationType,
     ParticipantRole,
 } from '@prisma/client';
-import { MessageResponse } from './message.response';
 
 export class ParticipantResponse {
     @ApiProperty()
@@ -30,8 +29,6 @@ export class ConversationResponse implements Conversation {
     avatarIds: number[];
     @ApiProperty()
     type: ConversationType;
-    @ApiProperty()
-    messages: MessageResponse[];
     @ApiProperty()
     participants: ParticipantResponse[];
     constructor(conversation: ConversationResponse) {

@@ -28,6 +28,7 @@ export function Feed({ subreddit }: FeedProps) {
                 return (
                     <div onClick={() => router.push(`/post/${post.id}`)}>
                         <Post
+                            isMainPost={true}
                             key={post.id}
                             id={post.id}
                             userAvatar={post.creatorAvatar}
