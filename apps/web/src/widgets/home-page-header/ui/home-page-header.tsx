@@ -29,29 +29,6 @@ export function HomePageHeader() {
                     </p>
                 </div>
             </Link>
-            {/* Home box
-            <div className="dropdown">
-                <div
-                    tabIndex={0}
-                    role="button"
-                    className="flex items-center mx-7 gap-1 lg:gap-0"
-                >
-                    <FaHome />
-                    <p className="mx-2 hidden lg:inline">Home</p>
-                    <FaChevronDown />
-                </div>
-                <ul
-                    tabIndex={0}
-                    className="dropdown-content z-[9999] menu p-2 shadow bg-base-100 rounded-box w-52"
-                >
-                    <li>
-                        <a>Item 1</a>
-                    </li>
-                    <li>
-                        <a>Item 2</a>
-                    </li>
-                </ul>
-            </div> */}
             {/* Search box */}
             <form className="input input-ghost flex items-center flex-1 space-x-2 ml-6">
                 <IoSearch className="text-grey-500" />
@@ -83,7 +60,7 @@ export function HomePageHeader() {
                 >
                     <div className="relative h-5 w-5">
                         <Image
-                            src="./app-logo.svg"
+                            src="/app-logo.svg"
                             layout="fill"
                             alt="app-logo"
                         />

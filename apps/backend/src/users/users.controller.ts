@@ -36,7 +36,6 @@ export class UsersController {
         const user = await this.usersService.findByEmail(email);
         return new UserResponse(user);
     }
-
     @ApiResponse({
         isArray: true,
         type: UserResponse,

@@ -1,6 +1,4 @@
-import { UiAvatar, UiSpinner } from '@/shared/ui';
 import { getAttachmentUrl, getFullUrl } from '@/shared/utils';
-import clsx from 'clsx';
 import Link from 'next/link';
 import { BsChat } from 'react-icons/bs';
 import { FaArrowDown, FaArrowUp, FaRegBookmark } from 'react-icons/fa6';
